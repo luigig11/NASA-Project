@@ -1,11 +1,16 @@
 const http = require('http');
 // const mongoose = require('mongoose');
 
+//la funcion que necesito para que el paquete dotenv llene el modulo process.env con los valores seteados en el archivo .env
+//se pone arriba de los demas modulos porque queremos que se llene el modulo process.env y luego los otros puedan usarlo
+require('dotenv').config(); 
+
 const app = require('./app');
 
 const {mongoConnect} = require('./services/mongo');
 
 const { loadPlanetsData } = require('./models/planets.model');
+const { loadLaunchesData } = require('./models/launches.model');
 
 const PORT = process.env.PORT || 8000;
 
@@ -26,6 +31,7 @@ async function startServer() {
     // await mongoose.connect(MONGO_URL);
     await mongoConnect();
     await loadPlanetsData();
+    await loadLaunchesData();
 
     server.listen(PORT, () => {
         console.log(`Listening on port: ${PORT}`);

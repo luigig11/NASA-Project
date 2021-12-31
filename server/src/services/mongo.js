@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGO_URL = 'mongodb+srv://nasa-api:XVOaUdnhh5or0cfQ@nasacluster.zsfer.mongodb.net/nasa?retryWrites=true&w=majority'
+const MONGO_URL = process.env.MONGO_URL;
 
 //once es un evento que se dispara solo una vez, lo usamos en lugar de on porque la BD solo se abre una vez al iniciarse
 mongoose.connection.once('open', () => {
