@@ -6,12 +6,17 @@ on: #para indicar en que evento se activa el workflow
     branches: [master] #el workflow se activa cuando se haga pull_request a la rama master
 jobs: #los workflows se componen de uno o mas jobs
   build: #lo primero que hace el job es el build
+    env: #para especificar el ambiente en el que correrá el job
+      CI: true #caracteristica propia del script test de create react app
+    strategy: #para establecer otras configuraciones para el job como diferentes variables de ambiente o versiones de node. Esto ocasionara que haya un job build corriendo en paralelo por cada variable
+      matrix: [14.x, 16.x] #en este caso establezco variables de versiones de node
     runs-on: ubuntu-latest #indica en que plataformas se puede ejecutar el job
     steps: #indica los pasos de jobs.
       - uses: actions/checkout@v2 #las acciones a usar por el job. Esta es una action reutilizaboe de github
-      - name: Use Node.js version 16 #podemos darle nombre a los pasos
+      - name: Use Node.js version ${{ matrix.node-version }} #podemos darle nombre a los pasos
         uses: actions/setup-node@v2
         with: #para indicar algun parametro de la acción
-          node-version: '16' #en este caso el parametro es la version de node
+          node-version: ${{ matrix.node-version }} #en este caso el parametro es la version de node que se para como parametro que se toma de la matriz
       - run: npm install #para correr nuestros propios comandos
       - run: npm run build --prefix client
+      - run: npm test #script del package.json para ejecutar los tests del frontend y backend
