@@ -1,14 +1,16 @@
 const request = require('supertest');
 const app = require('../../app');
+const { loadPlanetsData } = require('../../models/planets.model');
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo');
 
 describe('Launches API', () => { //ubicamos todas las pruebas dentro de una misma suite para poder crear una sola conexión a BD que funcione para todas las pruebas
 
     beforeAll(async () => { //para ejecutar el callback antes que todas las demas sentencias
         await mongoConnect();
+        await loadPlanetsData(); //para cargar la data de planetas tambien en el caso de prueba
     });
 
-    afterAll(async () => {
+    afterAll(async () => { //para ejecutar el callback despues dee 
         await mongoDisconnect();
     });
 
